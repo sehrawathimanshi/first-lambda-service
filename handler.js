@@ -1,22 +1,23 @@
-'use strict';
-const AWS = require('aws-sdk');
-AWS.config.update({ region: 'us-east-2'})
-
-module.exports.helloWorld = (event, context, callback) => {
-  console.log(AWS.config);
-  
-  const response = {
+module.exports.hello = async (event) => {
+  console.log(event.pathParameters.name);
+  const {first, second} = event;
+  return {
     statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*', // Required for CORS support to work
-      // accept: 'application/json'
-
-    },
-    body: JSON.stringify({
-      message: 'Go Serverless v1.0! Your function executed successfully!',
-      input: event,
-    }),
+    body: JSON.stringify(
+      {
+        message: 'Go Serverless v1.0! Your function executed successfully!',
+        returnName: `Hello ${event.pathParameters.name}`
+        // input: event,
+      },
+      null,
+      2
+    ),
   };
+  /* When we need to throw error
+    throw('soomething went wrong')
+  */
 
-  callback(null, response);
+
+  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
+  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
 };
